@@ -1,8 +1,11 @@
 package com.sunshineapp.cuong.sunshine;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -46,6 +49,9 @@ public class ForecastFragment extends Fragment {
     private ArrayList<String> items;
 
     private String zipCode;
+    private String temperatureUnit;
+    private static final String metricSymbol = "\u2103";
+    private static final String imperialSymbol = "\u2109";
 
     public ForecastFragment() {
     }
@@ -54,11 +60,21 @@ public class ForecastFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-        zipCode = "94043";
-        //setMenuVisibility (true);
 
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        refreshWeather();
+    }
+
+    private void refreshWeather(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        zipCode = sharedPref.getString(getString(R.string.location_key), "");
+        temperatureUnit = sharedPref.getString(getString(R.string.temperature_unit_key), "");
+        new FetchWeatherTask().execute(zipCode);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -71,7 +87,7 @@ public class ForecastFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                new FetchWeatherTask().execute(zipCode);
+                refreshWeather();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -99,11 +115,16 @@ public class ForecastFragment extends Fragment {
         v.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = getActivity().getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, "Hello! " + position + ". id: " + id, duration);
-                toast.show();
+                String forecast = adapters.getItem(position);
+
+                Context context = getActivity().getApplicationContext();
+
+                //call detail activity
+                Intent detailWeather = new Intent(context, DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
+                //detailWeather.setData(Uri.parse(fileUrl));
+                getActivity().startActivity(detailWeather);
+
             }
         });
 
@@ -238,7 +259,16 @@ public class ForecastFragment extends Fragment {
                         dateTime = dayTime.setJulianDay(julianStartDay + i);
                         String date = sdf.format(dateTime);
 
-                        returnList[i]=date + " - " + main + " - " + Math.round(max) + "/" + Math.round(min);
+                        //reading unit setting and convert temp numbers
+                        String degreeSymbol = metricSymbol;
+                        if (!"Metric".equals(temperatureUnit)){
+                            min = min*1.8 + 32;
+                            max = max*1.8 + 32;
+                            degreeSymbol = imperialSymbol;
+                        }
+
+                        returnList[i]=date + " - " + main + " - " + Math.round(max) + degreeSymbol + "/" + Math.round(min) + degreeSymbol;
+
                         Log.d(LOG_TAG, returnList[i]);
                     }
 

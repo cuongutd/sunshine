@@ -1,0 +1,25 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="@string/location_key"
+        android:title="@string/pref_location_display_name"
+        android:defaultValue="@string/pref_location_default_display_name"
+        android:selectAllOnFocus="true"
+        android:capitalize="words"
+        android:inputType="textCapWords"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:key="@string/temperature_unit_key"
+        android:title="@string/pref_title_temperature_units"
+        android:defaultValue="Metric"
+        android:entries="@array/pref_temperature_units"
+        android:entryValues="@array/pref_temperature_unit_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+</PreferenceScreen>
