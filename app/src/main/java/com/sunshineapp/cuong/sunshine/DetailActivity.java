@@ -17,6 +17,13 @@ public class DetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        if(savedInstanceState == null){
+            Bundle args = new Bundle();
+            args.putParcelable(DetailActivityFragment.DETAIL_URI, getIntent().getData());
+            DetailActivityFragment df = new DetailActivityFragment();
+            df.setArguments(args);
+            getSupportFragmentManager().beginTransaction().add(R.id.weather_detail_container, df).commit();
+        }
     }
 
 
@@ -31,11 +38,11 @@ public class DetailActivity extends ActionBarActivity {
         mShareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(item);
 
         String forecast = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-
+        //TODO:
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         //shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, forecast + "#SunshineApp");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, forecast + getString(R.string.shareText));
         setShareIntent(shareIntent);
 
         return true;

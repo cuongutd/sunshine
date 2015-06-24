@@ -1,11 +1,16 @@
 package com.sunshineapp.cuong.sunshine;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+
+import com.sunshineapp.cuong.sunshine.sync.SunshineSyncAdapter;
 
 import java.util.List;
 
@@ -18,7 +23,9 @@ public class SettingsActivity extends PreferenceActivity
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.temperature_unit_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.notificationPrefKey)));
     }
+
     /**
      * Attaches a listener so the summary is always updated with the preference value.
      * Also fires the listener once, to initialize the summary (so it shows up before the value
@@ -30,10 +37,17 @@ public class SettingsActivity extends PreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        if (preference.getKey().equals(getString(R.string.notificationPrefKey)))
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getBoolean(preference.getKey(), true));
+        else
+            onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+
     }
 
     @Override
@@ -52,6 +66,17 @@ public class SettingsActivity extends PreferenceActivity
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
+
+        SunshineSyncAdapter.syncImmediately(this);
+
+
+
         return true;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Sunshine</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,5 +7,32 @@
     <string name="iconCloudyString">Cloudy</string>
     <string name="s_textview">Today - Sunny - 88/63</string>
     <string name="title_activity_detail">Details</string>
+    <string name="pref_units_metric">Metric</string>
+    <string name="pref_units_imperial">Imperial</string>
+    <string name="pref_location_default">75074</string>
+    <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
+    <string name="today">Today</string>
+
+    <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
+    <string name="tomorrow">Tomorrow</string>
+
+    <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
+    <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+
+    <!-- Account type (for sync-adapter authenticator) -->
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">com.sunshineapp.cuong</string>
+    <string name="content_authority">com.sunshineapp.cuong.sunshine</string>
+    <string name="shareText">#SunshineApp</string>
+
+    +    <!-- Notification Format -->
+    +    <string name="format_notification">Forecast: <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g> Low: <xliff:g id="low">%3$s</xliff:g></string>
+    +
+    +    <!-- Strings related to Notification preference -->
+    +    <string name="pref_last_notification">last_notification</string>
+    <string name="notificationPrefKey">notificationPref</string>
+    <string name="action_test_title">Test item click</string>
+
 
 </resources>

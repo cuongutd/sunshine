@@ -22,4 +22,11 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
+    <CheckBoxPreference
+        android:title="Send update notification"
+        android:defaultValue="true"
+        android:summaryOn="Enabled"
+        android:summaryOff="Diabled"
+        android:key="@string/notificationPrefKey" />
+
 </PreferenceScreen>
